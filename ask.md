@@ -144,7 +144,7 @@ permissions:
   - { action: shell, resource: "opencode service status*", effect: allow }
   - { action: shell, resource: "opencode api get *", effect: allow }
 
-  # --- guards: force approval for write flags, secrets, or redirection ---
+  # --- guards: force approval for write flags or secrets ---
   - { action: shell, resource: "* --output*", effect: ask }
   - { action: shell, resource: "* --raw*", effect: ask }
   - { action: shell, resource: "*.env*", effect: ask }
@@ -155,8 +155,6 @@ permissions:
   - { action: shell, resource: "*_TOKEN*", effect: ask }
   - { action: shell, resource: "*SECRET*", effect: ask }
   - { action: shell, resource: "*PASSWORD*", effect: ask }
-  - { action: shell, resource: "*>*", effect: ask }
-  - { action: shell, resource: "*<*", effect: ask }
 ---
 
 You are a rigorous research analyst. Your job is to answer questions correctly,
