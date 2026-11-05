@@ -1,19 +1,19 @@
 # opencode-ask-agent
 
-A read-only OpenCode agent for asking questions. It drills into primary sources,
-verifies claims against ground truth, and reports what is verified, inferred, or
-still unknown.
+A research-focused OpenCode agent for asking questions. It drills into primary
+sources, verifies claims against ground truth, and reports what is verified,
+inferred, or still unknown.
 
 ## What it is
 
 `ask.md` is the agent definition: model-agnostic, `mode: all` (usable as a
-primary agent or delegated to as a subagent), with read-only permissions and a
-narrow allowlist for shell commands that only discover, read, or inspect.
+primary agent or delegated to as a subagent). The edit tools are denied, so it
+cannot write files through them. Shell is allowed without prompting; read-only
+behavior is a prompt-level instruction, not an enforced sandbox.
 
-Shell commands are allowed without prompting only when they are read-only
-inspection commands. Everything else asks first. Output flags such as
-`--output`, secret-bearing paths such as `.env` and `~/.ssh`, and all shell
-redirection are forced back to an approval prompt.
+Because shell runs with the host user's authority, the agent can still modify
+files through commands such as `rm`, `mv`, or output redirection. The edit deny
+only blocks OpenCode's dedicated edit tools.
 
 ## Install
 
@@ -43,9 +43,8 @@ Example:
 
 - Keep this file as the source of truth. Editing the symlink target updates the
   active agent.
-- Permissions are intentionally conservative. If a legitimate inspection
-  command asks for approval, approve it once or add a narrow rule here rather
-  than broadening the default `shell` rule.
+- Shell is intentionally unrestricted. If you want a hard read-only boundary,
+  set the `shell` rule back to `ask` or `deny` and add an allowlist.
 - `git log`, `git show`, and `git diff` can invoke configured pagers, textconv
   filters, or external diff drivers. Use trusted repositories.
 
